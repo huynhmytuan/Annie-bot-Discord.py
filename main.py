@@ -4,7 +4,6 @@ from datetime import datetime
 import pytz
 from stay_online import keep_alive
 from discord.ext import commands, tasks
-import requests
 
 # Getting the information of new members
 intents = discord.Intents.all()
@@ -32,7 +31,7 @@ async def on_ready():
   print(f'WE HAVE LOGGED IN AS {client.user}')
   # req = requests.get("https://discord.com/api/path/to/the/endpoint")
   # print(req.headers["X-RateLimit-Remaining"])
-   # -------Sync Extention-----
+   #------------Sync Extention--------
   for cog in exten:
     try:
     #Doi token trong secret luon di. Xong het Tuan doi lai
@@ -44,7 +43,7 @@ async def on_ready():
   # --Run update server member stats--
   update_stats.start()
 
-#-----------------Live Update Member Online----------
+#------------Live Update Member Online----------
 @tasks.loop(minutes=5.2)
 async def update_stats():
   
@@ -59,7 +58,7 @@ async def update_stats():
   online_channel = None 
   member_channel = None
   studying_channel = None
-  bot_channel = None
+  # bot_channel = None
   for channel in list_channel:
     if int(channel.id) == 887687580701839402: 
       online_channel = channel
@@ -67,12 +66,6 @@ async def update_stats():
       member_channel = channel
     elif int(channel.id) == 888421780744724510:
       studying_channel = channel
-    elif int(channel.id) == 888423453491867679:
-      bot_channel = channel
-  # online_channel =  guild.get_channel(887687580701839402)
-  # member_channel = guild.get_channel(887687809115254834)
-  # studying_channel = guild.get_channel(888421780744724510)
-  # bot_channel = guild.get_channel(888423453491867679)
 
   onlineMembers = sum(member.status != discord.Status.offline and not member.bot for member in list_member)
   online = '💚 Online Now: ' +str(onlineMembers) + ' users'
@@ -81,8 +74,8 @@ async def update_stats():
   mem = '👪 Members: ' +str(len(list_member)) + ' users'
   await member_channel.edit(name=mem,reason = '')
   #Edit stats Bots
-  bot = '🤖 Bot In Server: ' +str(sum(member.bot for member in list_member)) + ' bots'
-  await bot_channel.edit(name=bot, reason = '')
+  # bot = '🤖 Bot In Server: ' +str(sum(member.bot for member in list_member)) + ' bots'
+  # await bot_channel.edit(name=bot, reason = '')
   #Edit stats Studying Member
   studyingMember = 0
   
