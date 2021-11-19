@@ -4,6 +4,7 @@ from datetime import datetime
 import pytz
 from stay_online import keep_alive
 from discord.ext import commands, tasks
+from config import *
 
 # Getting the information of new members
 intents = discord.Intents.all()
@@ -14,12 +15,7 @@ client = commands.Bot(command_prefix= '?', intents=intents )
 
 # CONTSTRANT VALUES GET FROM Secret Value
 TOKEN = os.getenv('TOKEN')
-GUILD_ID = int(os.getenv('GUILD_ID'))
-ADMIN_CHANNEL_ID = int(os.getenv('ADMIN_CHANNEL_ID'))
-WELCOME_CHANNEL_ID = int(os.getenv('WELCOME_CHANNEL_ID'))
-GOODBYE_CHANNEL_ID = int(os.getenv('GOODBYE_CHANNEL_ID'))
-RULE_CHANNEL_ID = int(os.getenv('RULE_CHANNEL_ID'))
-exten = ['cogs.peace','cogs.social']
+exten = ['cogs.peace','cogs.social','cogs.speach']
 
 # Register an event
 @client.event
@@ -27,15 +23,11 @@ async def on_ready():
   """
   Creating the asynchronous function when the bot is ready
   """
-  await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name='Over You!'))
+  await client.change_presence(activity=discord.Activity(type=discord.ActivityType.playing, name='Với Bạn'))
   print(f'WE HAVE LOGGED IN AS {client.user}')
-  # req = requests.get("https://discord.com/api/path/to/the/endpoint")
-  # print(req.headers["X-RateLimit-Remaining"])
    #------------Sync Extention--------
   for cog in exten:
     try:
-    #Doi token trong secret luon di. Xong het Tuan doi lai
-    # chac la bo bot function cua con bot nay qua con khac 
       client.load_extension(cog)
       print(f'{cog} was loaded!')
     except Exception as e:
@@ -73,15 +65,12 @@ async def update_stats():
   #Edit stats All Member
   mem = '👪 Members: ' +str(len(list_member)) + ' users'
   await member_channel.edit(name=mem,reason = '')
-  #Edit stats Bots
-  # bot = '🤖 Bot In Server: ' +str(sum(member.bot for member in list_member)) + ' bots'
-  # await bot_channel.edit(name=bot, reason = '')
-  #Edit stats Studying Member
   studyingMember = 0
   
-  #Sao kì ta, nãy mình thay mỗi cái guild.channels thành list_channel mà... Trước đó đúng
-  studying = (c for c in list_channel if( (c.type == discord.ChannelType.voice or c.type == discord.ChannelType.stage_voice ) and (('Study Room' in c.name ) or ('study with' in c.name) or ('study room' in c.name))))
-
+  # study categories name in lowcase
+  categories = ['book room', 'study hub']
+  studying = [c for c in list_channel if( (c.type == discord.ChannelType.voice or c.type == discord.ChannelType.stage_voice ) and any(word in str.lower(c.category.name) for word in categories))]
+  
   for channel in studying:
     studyingMember = studyingMember + len([member for member in channel.members if not member.bot])
 

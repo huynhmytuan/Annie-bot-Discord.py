@@ -5,13 +5,14 @@ import urllib
 import aiohttp
 import datetime
 import os
+from config import *
 
 class music(commands.Cog):
   # CONTSTRANT VALUES GET FROM Secret Value
   def __init__(self, bot):
     self.bot = bot
     self.TOKEN = os.getenv('TOKEN')
-    self.GUILD_ID = int(os.getenv('GUILD_ID'))
+    self.GUILD_ID = GUILD_ID
   
   @commands.command(aliases = ['l', 'lyrc', 'lyric']) 
   async def lyrics(self, ctx, *, search = None):

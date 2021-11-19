@@ -4,13 +4,13 @@ import discord
 from googletrans import Translator
 import os
 import time
+from config import *
 
 class quotes(commands.Cog):
   # CONTSTRANT VALUES GET FROM Secret Value
   def __init__(self, bot):
     self.bot = bot
-    self.TOKEN = os.getenv('TOKEN')
-    self.GUILD_ID = int(os.getenv('GUILD_ID'))
+    self.GUILD_ID = GUILD_ID
     self.translator = Translator()
 
   # -----Random quoute serve ------
